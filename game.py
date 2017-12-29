@@ -16,14 +16,15 @@ pygame.display.set_caption("Car")
 clock = pygame.time.Clock()
 carImg = pygame.image.load("Car.png").convert()
 car2Img = pygame.image.load("Car2.png").convert()
+bg = pygame.image.load("road.png").convert()
 pygame.mixer.music.load('sound.ogg')
 
 
 def things_dodged(count1, count2, score):
     font = pygame.font.SysFont(None, 25)
-    text = font.render("Dodged: "+str(count1)+" Level: " + str(count2), True, black)
+    text = font.render("Dodged: "+str(count1)+" Level: " + str(count2), True, white)
     gameDisplay.blit(text, (0, 0))
-    text1 = font.render("Best score: " + score, True, black)
+    text1 = font.render("Best score: " + score, True, white)
     gameDisplay.blit(text1, (0, 30))
 
 
@@ -77,6 +78,7 @@ def game_loop():
     level = 1
     gameExit = False
     while not gameExit:
+        gameDisplay.blit(bg, (0, 0))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -90,7 +92,7 @@ def game_loop():
                 if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                     x_change = 0
         x += x_change
-        gameDisplay.fill(white)
+        #gameDisplay.fill(white)
         things(thing_startx, thing_starty)
         thing_starty += thing_speed
         car(x, y)
