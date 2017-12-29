@@ -101,13 +101,14 @@ def game_loop():
             thing_startx = random.randrange(0,342)
             dodged +=1
             if dodged % 20 == 0:
+                prom = random.randrange(1, 3)
                 level +=1
-            thing_speed +=level*0.3
+                thing_speed = thing_speed + prom + level
         if x > display_width - car_width or x < 0:
             writerecord(dodged, (int(bscore)))
             crash()
         if y < thing_starty + 139:
-            if x > thing_startx and x < thing_startx + 58 or x + car_width > thing_startx and x + car_width < thing_startx + 139:
+            if x > thing_startx and x < thing_startx + 58 or x + car_width > thing_startx and x + car_width < thing_startx + 58:
                 writerecord(dodged, int(bscore))
                 crash()
         pygame.display.update()
