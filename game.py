@@ -6,7 +6,7 @@ import random
 pygame.init()
 display_width = 800
 display_height = 600
-car_width = 78
+car_width = 73
 black = (0, 0, 0)
 white = (255, 255, 255)
 red = (255, 0, 0)
@@ -17,9 +17,9 @@ pygame.display.set_caption("Car")
 clock = pygame.time.Clock()
 carImg = pygame.image.load("Car.png").convert()
 
-def things_dodged(count):
+def things_dodged(count1, count2):
     font = pygame.font.SysFont(None, 25)
-    text = font.render("Dodged: "+str(count), True, black)
+    text = font.render("Dodged: "+str(count1)+" Level: "+ str(count2), True, black)
     gameDisplay.blit(text, (0, 0))
 
 
@@ -46,11 +46,6 @@ def things(thingx, thingy, thingw, thingh, color):
     pygame.draw.rect(gameDisplay,block_color,[thingx ,thingy, thingw, thingh])
 
 
-def things2(thingx, thingy, thingw, thingh, color):
-    pygame.draw.rect(gameDisplay,block_color,[thingx ,thingy, thingw, thingh])
-
-
-
 def crash():
     message_display('You Crashed')
 
@@ -66,6 +61,7 @@ def game_loop():
     thing_width = 100
     thing_height = 100
     dodged = 0
+    level = 1
     gameExit = False
     while not gameExit:
         for event in pygame.event.get():
@@ -85,15 +81,17 @@ def game_loop():
         things(thing_startx, thing_starty, thing_width, thing_height, block_color)
         thing_starty += thing_speed
         car(x, y)
-        things_dodged(dodged)
+        things_dodged(dodged, level)
         if x > display_width - car_width or x < 0:
             crash()
         if thing_starty > display_height:
             thing_starty = 0 - thing_height
             thing_startx = random.randrange(0, display_width)
             dodged +=1
-            thing_speed +=0.3
-            thing_width +=random.randrange(-20,50)
+            if dodged % 20 == 0:
+                level +=1
+            thing_speed +=level*0.3
+            thing_width +=random.randrange(-50,50)
         if y < thing_starty + thing_height:
             if x > thing_startx and x < thing_startx + thing_width or x + car_width > thing_startx and x + car_width < thing_startx + thing_width:
                crash()
