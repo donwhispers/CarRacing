@@ -4,17 +4,19 @@ import random
 
 
 pygame.init()
-display_width = 800
-display_height = 600
-car_width = 80
-black = (0, 0, 0)
+display_width = 400
+display_height = 650
+car_width = 65
 white = (255, 255, 255)
 red = (255, 0, 0)
+black = (0, 0, 0)
 block_color = (53, 115, 255)
 gameDisplay = pygame.display.set_mode((display_width, display_height))
 pygame.display.set_caption("Car")
 clock = pygame.time.Clock()
 carImg = pygame.image.load("Car.png").convert()
+car2Img = pygame.image.load("Car2.png").convert()
+pygame.mixer.music.load('sound.ogg')
 
 
 def things_dodged(count1, count2, score):
@@ -35,7 +37,7 @@ def text_objects(text, font):
 
 
 def message_display(text):
-    largeText = pygame.font.Font('freesansbold.ttf', 115)
+    largeText = pygame.font.Font('freesansbold.ttf', 50)
     TextSurf, TextRect = text_objects(text, largeText)
     TextRect.center = ((display_width/2), (display_height/2))
     gameDisplay.blit(TextSurf, TextRect)
@@ -44,8 +46,8 @@ def message_display(text):
     game_loop()
 
 
-def things(thingx, thingy, thingw, thingh, color):
-    pygame.draw.rect(gameDisplay,block_color,[thingx ,thingy, thingw, thingh])
+def things(thingx, thingy):
+    gameDisplay.blit(car2Img, (thingx, thingy))
 
 
 def writerecord(count, score):
@@ -59,8 +61,8 @@ def crash():
     message_display('You Crashed')
 
 
-
 def game_loop():
+    pygame.mixer.music.play()
     x = (display_width * 0.45)
     y = (display_height * 0.8)
     x_change = 0
@@ -69,10 +71,8 @@ def game_loop():
     f.close()
     bscore.split()
     thing_startx = random.randrange(0, display_width)
-    thing_starty = -600
+    thing_starty = -650
     thing_speed = 4
-    thing_width = 100
-    thing_height = 100
     dodged = 0
     level = 1
     gameExit = False
@@ -91,23 +91,23 @@ def game_loop():
                     x_change = 0
         x += x_change
         gameDisplay.fill(white)
-        things(thing_startx, thing_starty, thing_width, thing_height, block_color)
+        things(thing_startx, thing_starty)
         thing_starty += thing_speed
         car(x, y)
         things_dodged(dodged, level, bscore)
         if thing_starty > display_height:
-            thing_starty = 0 - thing_height
-            thing_startx = random.randrange(0, display_width)
+            thing_starty = 0 - 148
+            thing_startx = 70
             dodged +=1
             if dodged % 20 == 0:
                 level +=1
             thing_speed +=level*0.3
-            thing_width +=random.randrange(-50,50)
+
         if x > display_width - car_width or x < 0:
             writerecord(dodged, (int(bscore)))
             crash()
-        if y < thing_starty + thing_height:
-            if x > thing_startx and x < thing_startx + thing_width or x + car_width > thing_startx and x + car_width < thing_startx + thing_width:
+        if y < thing_starty + 148:
+            if x > thing_startx and x < thing_startx + 70 or x + car_width > thing_startx and x + car_width < thing_startx + 148:
                 writerecord(dodged, int(bscore))
                 crash()
         pygame.display.update()
