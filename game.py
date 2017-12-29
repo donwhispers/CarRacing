@@ -6,7 +6,7 @@ import random
 pygame.init()
 display_width = 400
 display_height = 650
-car_width = 65
+car_width = 44
 white = (255, 255, 255)
 red = (255, 0, 0)
 black = (0, 0, 0)
@@ -70,12 +70,12 @@ def game_loop():
     f = open('best_score.txt', 'r')
     bscore = f.read()
     f.close()
-    bscore.split()
     thing_startx = random.randrange(0, display_width)
-    thing_starty = -650
+    thing_starty = -200
     thing_speed = 4
     dodged = 0
     level = 1
+    bscore.split()
     gameExit = False
     while not gameExit:
         gameDisplay.blit(bg, (0, 0))
@@ -92,24 +92,22 @@ def game_loop():
                 if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                     x_change = 0
         x += x_change
-        #gameDisplay.fill(white)
         things(thing_startx, thing_starty)
         thing_starty += thing_speed
         car(x, y)
         things_dodged(dodged, level, bscore)
         if thing_starty > display_height:
-            thing_starty = 0 - 148
-            thing_startx = 70
+            thing_starty = 0 - 139
+            thing_startx = random.randrange(0,342)
             dodged +=1
             if dodged % 20 == 0:
                 level +=1
             thing_speed +=level*0.3
-
         if x > display_width - car_width or x < 0:
             writerecord(dodged, (int(bscore)))
             crash()
-        if y < thing_starty + 148:
-            if x > thing_startx and x < thing_startx + 70 or x + car_width > thing_startx and x + car_width < thing_startx + 148:
+        if y < thing_starty + 139:
+            if x > thing_startx and x < thing_startx + 58 or x + car_width > thing_startx and x + car_width < thing_startx + 139:
                 writerecord(dodged, int(bscore))
                 crash()
         pygame.display.update()
